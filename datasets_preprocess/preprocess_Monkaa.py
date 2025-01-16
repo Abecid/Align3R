@@ -19,12 +19,12 @@ from utils import *
 import dust3r.datasets.utils.cropping as cropping  # noqa
 from scipy.spatial.transform import Rotation
 
-
+data_path = "/scratch/partial_datasets/align3r/data"
 
 def get_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output_dir", type=str, default="../data/SceneFlow/Monkaa_proc")
-    parser.add_argument("--data_dir", type=str, default="../data/SceneFlow/Monkaa")
+    parser.add_argument("--output_dir", type=str, default=f"{data_path}/SceneFlow/Monkaa_proc")
+    parser.add_argument("--data_dir", type=str, default=f"{data_path}/SceneFlow/Monkaa")
     parser.add_argument("--seed", type=int, default=42)
 
     parser.add_argument("--img_size", type=int, default=512,

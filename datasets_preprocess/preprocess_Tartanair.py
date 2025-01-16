@@ -60,7 +60,8 @@ blender2opencv = np.float32([[1, 0, 0, 0],
 
 img_size = 512
 
-input_path = "../data/Tartanair"
+data_path = "/scratch/partial_datasets/align3r/data"
+input_path = f"{data_path}/Tartanair"
 
 
 data_dir = input_path

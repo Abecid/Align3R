@@ -2,7 +2,10 @@
 import glob
 import os
 import shutil
-dirs = glob.glob("../data/bonn/rgbd_bonn_dataset/*/")
+
+data_path = "/scratch/partial_datasets/align3r/data"
+
+dirs = glob.glob(f"{data_path}/bonn/rgbd_bonn_dataset/*/")
 dirs = sorted(dirs)
 # extract frames
 for dir in dirs:
