@@ -14,3 +14,4 @@ huggingface-hub[torch]>=0.22
 gdown
 click
 pillow
+h5py

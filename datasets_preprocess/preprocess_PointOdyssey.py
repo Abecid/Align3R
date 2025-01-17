@@ -37,7 +37,11 @@ for set in set_list:
         imgs_path = osp.join(data_dir, sequence, "rgbs")
         depths_path = osp.join(data_dir, sequence, "depths")
         # masks_path = osp.join(data_dir, sequence, "maps/skymap_left")
-        annotations = np.load(osp.join(data_dir, sequence, "anno.npz"))
+        try:
+            annotations = np.load(osp.join(data_dir, sequence, "anno.npz"))
+        except Exception as e:
+            print(f"Error in loading annotations for {sequence}")
+            continue
         trajs_3d = annotations['trajs_3d'].astype(np.float32)
         intrinsics = annotations['intrinsics'].astype(np.float32)
         extrinsics = annotations['extrinsics'].astype(np.float32)
