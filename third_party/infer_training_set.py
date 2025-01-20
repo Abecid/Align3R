@@ -11,7 +11,6 @@ import argparse
 from transformers import pipeline
 import torch
 
-import depth_pro
 from third_party.MoGe.moge.model import MoGeModel
 
 def find_images(directory):
@@ -35,10 +34,12 @@ parser.add_argument('--model_name', default="moge",
 parser.add_argument('--data_path', default="/scratch/partial_datasets/align3r/data",
                         type=str)
 args = parser.parse_args()
-# print(args.a)
-model, transform = depth_pro.create_model_and_transforms(device='cuda')
-model.eval()
-pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf",device='cuda')
+
+if args.model_name == "depthpro":
+  import depth_pro
+  model, transform = depth_pro.create_model_and_transforms(device='cuda')
+  model.eval()
+  pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf",device='cuda')
 
 if args.dataset_name == "Tartanair":
   dir = f'{args.data_path}/Tartanair_proc/'

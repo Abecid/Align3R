@@ -11,7 +11,6 @@ import cv2
 import torch
 from transformers import pipeline
 
-import depth_pro
 from third_party.MoGe.moge.model import MoGeModel
 
 def find_images(directory):
@@ -36,9 +35,12 @@ parser.add_argument('--data_path', default="/scratch/partial_datasets/align3r/da
                         type=str)
 args = parser.parse_args()
 
-model, transform = depth_pro.create_model_and_transforms(device='cuda')
-model.eval()
-pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf",device='cuda')
+if args.model_name == "depthpro":
+  import depth_pro
+  model, transform = depth_pro.create_model_and_transforms(device='cuda')
+  model.eval()
+  pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf",device='cuda')
+
 if args.dataset_name == "bonn":
   dir = f'{args.data_path}/bonn/rgbd_bonn_dataset/'
 elif args.dataset_name == "davis":
