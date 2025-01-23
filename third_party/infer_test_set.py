@@ -58,9 +58,9 @@ for scene in tqdm(sorted(os.listdir(dir))):
   data_dir = dir + scene
   if os.path.isdir(data_dir):
     if args.dataset_name == "bonn":
-      data_dir = data_dir + '/rgb_110'
+      data_dir = data_dir + '/rgb'
     elif args.dataset_name == "tum":
-      data_dir = data_dir + '/rgb_50'
+      data_dir = data_dir + '/rgb'
     for image_path in tqdm(sorted(os.listdir(data_dir))[int(args.a):int(args.b)]):
       #print(image_path)
       if image_path.split('.')[-1]=='jpg' or image_path.split('.')[-1]=='png': 
@@ -69,17 +69,21 @@ for scene in tqdm(sorted(os.listdir(dir))):
             os.makedirs(data_dir.replace('rgb_110', 'rgb_110_depth_prediction_depthanything'))
           if not os.path.exists(data_dir.replace('rgb_110', 'rgb_110_depth_prediction_depthpro')):
             os.makedirs(data_dir.replace('rgb_110', 'rgb_110_depth_prediction_depthpro'))
+          if not os.path.exists(data_dir.replace('rgb', 'rgb_depth_prediction_moge')):
+            os.makedirs(data_dir.replace('rgb', 'rgb_depth_prediction_moge'))
           path_depthanything = os.path.join(data_dir, image_path).replace('rgb_110', 'rgb_110_depth_prediction_depthanything').replace('.jpg', '.npz').replace('.png', '.npz')
           path_depthpro = os.path.join(data_dir, image_path).replace('rgb_110', 'rgb_110_depth_prediction_depthpro').replace('.jpg', '.npz').replace('.png', '.npz')
-          path_moge = os.path.join(data_dir, image_path).replace('rgb_110', 'rgb_110_depth_prediction_moge').replace('.jpg', '.npz').replace('.png', '.npz')
+          path_moge = os.path.join(data_dir, image_path).replace('rgb', 'rgb_depth_prediction_moge').replace('.jpg', '.npz').replace('.png', '.npz')
         elif args.dataset_name == "tum":
           if not os.path.exists(data_dir.replace('rgb_50', 'rgb_50_depth_prediction_depthanything')):
             os.makedirs(data_dir.replace('rgb_50', 'rgb_50_depth_prediction_depthanything'))
           if not os.path.exists(data_dir.replace('rgb_50', 'rgb_50_depth_prediction_depthpro')):
             os.makedirs(data_dir.replace('rgb_50', 'rgb_50_depth_prediction_depthpro'))
+          if not os.path.exists(data_dir.replace('rgb', 'rgb_depth_prediction_moge')):
+            os.makedirs(data_dir.replace('rgb', 'rgb_depth_prediction_moge'))
           path_depthanything = os.path.join(data_dir, image_path).replace('rgb_50', 'rgb_50_depth_prediction_depthanything').replace('.jpg', '.npz').replace('.png', '.npz')
           path_depthpro = os.path.join(data_dir, image_path).replace('rgb_50', 'rgb_50_depth_prediction_depthpro').replace('.jpg', '.npz').replace('.png', '.npz')
-          path_moge = os.path.join(data_dir, image_path).replace('rgb_50', 'rgb_50_depth_prediction_moge').replace('.jpg', '.npz').replace('.png', '.npz')
+          path_moge = os.path.join(data_dir, image_path).replace('rgb', 'rgb_depth_prediction_moge').replace('.jpg', '.npz').replace('.png', '.npz')
         elif args.dataset_name == "sintel":
           if not os.path.exists(data_dir.replace('final', 'depth_prediction_depthanything')):
             os.makedirs(data_dir.replace('final', 'depth_prediction_depthanything'))
