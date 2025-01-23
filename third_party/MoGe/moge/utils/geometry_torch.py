@@ -7,8 +7,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.types
-import utils3d
 
+import third_party.MoGe.utils3d as utils3d
 from .tools import timeit
 from .geometry_numpy import solve_optimal_focal_shift, solve_optimal_shift
 

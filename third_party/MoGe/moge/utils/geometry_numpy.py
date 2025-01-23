@@ -3,7 +3,7 @@ from functools import partial
 import math
 
 import numpy as np
-import utils3d
+import third_party.MoGe.utils3d as utils3d
 
 from .tools import timeit
 
