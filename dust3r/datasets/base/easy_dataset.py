@@ -87,6 +87,14 @@ class ResizedDataset (EasyDataset):
         return f'{size_str} @ {repr(self.dataset)}'
 
     def set_epoch(self, epoch):
+        if len(self.dataset) == 0:
+            # Handle the empty dataset case gracefully
+            print(f"Dataset has zero length. Skipping epoch shuffle for epoch {epoch}.")
+            self._idxs_mapping = np.array([])  # Empty mapping for empty dataset
+            return
+        else:
+            print(f"ResizedDataset: Setting epoch {epoch} for dataset of length {len(self.dataset)}")
+
         # this random shuffle only depends on the epoch
         rng = np.random.default_rng(seed=epoch+777)
 

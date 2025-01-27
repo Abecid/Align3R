@@ -102,6 +102,11 @@ class PointodysseyDatasets(BaseStereoViewDataset):
             #maskmap = maskmap * (depthmap<100)
             depthmap *= maskmap
 
+            # Apply mask to pred_depth
+            # 1. Removing the Point Cloud
+            # 2. Set the depth to very high value (In case Align3r requires a point cloud for each pixel, 0 or -1)
+            # 3. Concate the mask to channel 1 to pointcloud, fix the encoder to accept another channel
+
             metadata = np.load(metadata_path)
             intrinsics = np.float32(metadata['camera_intrinsics'])
             camera_pose = np.linalg.inv(np.float32(metadata['camera_pose']))

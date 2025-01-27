@@ -17,6 +17,7 @@ echo "Starting: Vikitti"
 python datasets_preprocess/preprocess_vikitti.py
 echo "Vikitti done"
 
+# Dataset not found
 # python datasets_preprocess/preprocess_Flythings3D.py
 # echo "Flythings3D done"
 

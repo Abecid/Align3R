@@ -84,10 +84,10 @@ if __name__ == '__main__':
 
     os.makedirs(args.output_dir, exist_ok=True)
 
-    image_paths = sorted(glob(osp.join(args.data_dir, 'vkitti_2.0.3_rgb', '*/*/*/*')))
-    depth_paths = [im.replace('rgb', 'depth') for im in image_paths]
+    image_paths = sorted(glob(osp.join(args.data_dir, '*/*/frames/rgb')))
+    depth_paths = sorted(glob(osp.join(args.data_dir, '*/*/frames/depth')))
 
-    camera_paths = sorted(glob(osp.join(args.data_dir, 'vkitti_2.0.3_textgt', '*/*')))
+    camera_paths = sorted(glob(osp.join(args.data_dir, '*/*')))
 
     cameraintri_paths = [a + "/intrinsic.txt" for a in camera_paths]
     cameraextri_paths = [a + "/extrinsic.txt" for a in camera_paths]
@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
     scene_label = 0
 
-    for image_path, depth_path, cameraintri_path, cameraextri_path in zip(image_paths, depth_paths, cameraintri_paths, cameraextri_paths):
+    for image_path, depth_path, cameraintri_path, cameraextri_path in tqdm(zip(image_paths, depth_paths, cameraintri_paths, cameraextri_paths), total=len(image_paths)):
 
         for view in ["Camera_0", "Camera_1"]:
             image_path_view = os.path.join(image_path, view)
