@@ -9,7 +9,9 @@ from glob import glob
 import itertools
 import numpy as np
 import re
+
 import cv2
+import torch
 
 from dust3r.datasets.base.base_stereo_view_dataset import BaseStereoViewDataset
 from dust3r.utils.image import imread_cv2
@@ -166,16 +168,27 @@ class SceneFlowDatasets(BaseStereoViewDataset):
             mask_path = img_path.replace('_rgb.jpg', '_mask.png')
             metadata_path = img_path.replace('_rgb.jpg', '_metadata.npz')
             depthmap = readPFM(depthmap_path)
-            pred_depth = np.load(img_path.replace('.jpg', '_pred_depth_' + self.depth_prior_name + '.npz'))#['depth']
-            focal_length_px = pred_depth['focallength_px']#[0][0]
-            pred_depth = pred_depth['depth']
+            depth_info = np.load(img_path.replace('.jpg', '_pred_depth_' + self.depth_prior_name + '.npz'))#['depth']
+            focal_length_px = depth_info['focallength_px']#[0][0]
+            pred_depth = depth_info['depth']
             if focal_length_px.shape == (3,3):
               focal_length_px = focal_length_px[0][0]
-            pred_depth = self.pixel_to_pointcloud(pred_depth, focal_length_px)
+
             maskmap = imread_cv2(mask_path, cv2.IMREAD_UNCHANGED).astype(np.float32)
+
+            if depth_info.get('mask') is not None:
+                # Convert the depth with inf to the max depth value
+                valid_mask = (pred_depth > 0) & (pred_depth != torch.inf)
+                max_depth = torch.max(pred_depth[valid_mask])
+                pred_depth[depth_info['mask'] == 0] = max_depth
+
+                # Set the mask including the mask from the depth prior
+                # maskmap = maskmap * depth_info['mask']
+
             maskmap = (maskmap / 255.0) > 0.1
             #maskmap = maskmap * (depthmap<100)
             depthmap *= maskmap
+            pred_depth = self.pixel_to_pointcloud(pred_depth, focal_length_px)
             
             #pred_depth = pred_depth#/20.0
             metadata = np.load(metadata_path)
