@@ -109,7 +109,7 @@ class SpringDatasets(BaseStereoViewDataset):
             if depth_info.get('mask') is not None:
                 # Convert the depth with inf to the max depth value
                 valid_mask = (pred_depth > 0) & (pred_depth != torch.inf)
-                max_depth = torch.max(pred_depth[valid_mask])
+                max_depth = torch.max(torch.as_tensor(pred_depth[valid_mask], dtype=torch.float32))
                 pred_depth[depth_info['mask'] == 0] = max_depth
 
                 # Set the mask including the mask from the depth prior

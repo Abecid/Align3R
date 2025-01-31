@@ -249,7 +249,7 @@ class AsymmetricCroCo3DStereo (
 
         dec1, dec2 = self._decoder(feat1, pos1, feat2, pos2, point_cloud, point_cloud_pos)
 
-        with torch.cuda.amp.autocast(enabled=False):
+        with torch.amp.autocast(enabled=False):
             res1 = self._downstream_head(1, [tok.float() for tok in dec1], shape1)
             res2 = self._downstream_head(2, [tok.float() for tok in dec2], shape2)
         #print(res1)

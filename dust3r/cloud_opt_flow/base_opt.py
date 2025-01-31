@@ -441,7 +441,7 @@ class BasePCOptimizer (nn.Module):
             return loss, details
         return loss
 
-    @torch.cuda.amp.autocast(enabled=False)
+    @torch.amp.autocast(enabled=False)
     def compute_global_alignment(self, init=None, init_priors=None, save_score_path=None, save_score_only=False, niter_PnP=10, **kw):
         if init is None:
             pass
