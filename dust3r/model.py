@@ -23,6 +23,7 @@ hf_version_number = huggingface_hub.__version__
 assert version.parse(hf_version_number) >= version.parse("0.22.0"), ("Outdated huggingface_hub version, "
                                                                      "please reinstall requirements.txt")
 
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 def load_model(model_path, device, verbose=True):
     if verbose:
@@ -249,7 +250,7 @@ class AsymmetricCroCo3DStereo (
 
         dec1, dec2 = self._decoder(feat1, pos1, feat2, pos2, point_cloud, point_cloud_pos)
 
-        with torch.amp.autocast(enabled=False):
+        with torch.cuda.amp.autocast(enabled=False):
             res1 = self._downstream_head(1, [tok.float() for tok in dec1], shape1)
             res2 = self._downstream_head(2, [tok.float() for tok in dec2], shape2)
         #print(res1)

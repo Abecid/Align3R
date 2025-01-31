@@ -23,6 +23,8 @@ __all__ = [
     'InstantNGP',
 ]
 
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
 
 def get_rays(extrinsics: Tensor, intrinsics: Tensor, uv: Tensor) -> Tuple[Tensor, Tensor]:
     """
@@ -38,7 +40,7 @@ def get_rays(extrinsics: Tensor, intrinsics: Tensor, uv: Tensor) -> Tuple[Tensor
     """
     uvz = torch.cat([uv, torch.ones_like(uv[..., :1])], dim=-1).to(extrinsics)                                                          # (n_batch, n_views, n_rays, 3)
 
-    with torch.amp.autocast(enabled=False):
+    with torch.cuda.amp.autocast(enabled=False):
         inv_transformation = (intrinsics @ extrinsics[..., :3, :3]).inverse()
         inv_extrinsics = extrinsics.inverse()
     rays_d = uvz @ inv_transformation.transpose(-1, -2)                                                  

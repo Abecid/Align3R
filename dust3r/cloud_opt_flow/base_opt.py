@@ -26,6 +26,8 @@ import os
 import matplotlib.pyplot as plt
 from PIL import Image, ImageSequence
 
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
 def c2w_to_tumpose(c2w):
     """
     Convert a camera-to-world matrix to a tuple of translation and rotation
@@ -441,7 +443,7 @@ class BasePCOptimizer (nn.Module):
             return loss, details
         return loss
 
-    @torch.amp.autocast(enabled=False)
+    @torch.cuda.amp.autocast(enabled=False)
     def compute_global_alignment(self, init=None, init_priors=None, save_score_path=None, save_score_only=False, niter_PnP=10, **kw):
         if init is None:
             pass

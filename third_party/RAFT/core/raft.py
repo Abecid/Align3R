@@ -10,12 +10,14 @@ from utils.utils import bilinear_sampler, coords_grid, upflow8, InputPadder, coo
 from layer import conv3x3
 import math
 
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
 try:
-    autocast = torch.amp.autocast
+    autocast = torch.cuda.amp.autocast
 except:
     # dummy autocast for PyTorch < 1.6
     class autocast:
-        def __init__(self, enabled):
+        def __init__(self, enabled, device_type=device):
             pass
         def __enter__(self):
             pass
@@ -98,7 +100,7 @@ class RAFT(nn.Module):
         cdim = self.context_dim
 
         # run the feature network
-        with autocast(enabled=self.args.mixed_precision):
+        with autocast(enabled=self.args.mixed_precision, device_type=device):
             fmap1, fmap2 = self.fnet([image1, image2])        
         
         fmap1 = fmap1.float()
@@ -109,7 +111,7 @@ class RAFT(nn.Module):
             corr_fn = CorrBlock(fmap1, fmap2, radius=self.args.corr_radius)
 
         # run the context network
-        with autocast(enabled=self.args.mixed_precision):
+        with autocast(enabled=self.args.mixed_precision, device_type=device):
             cnet = self.cnet(image1)
             net, inp = torch.split(cnet, [hdim, cdim], dim=1)
             net = torch.tanh(net)
@@ -126,7 +128,7 @@ class RAFT(nn.Module):
             corr = corr_fn(coords1) # index correlation volume
 
             flow = coords1 - coords0
-            with autocast(enabled=self.args.mixed_precision):
+            with autocast(enabled=self.args.mixed_precision, device_type=device):
                 net, up_mask, delta_flow = self.update_block(net, inp, corr, flow)
 
             # F(t+1) = F(t) + \Delta(t)
