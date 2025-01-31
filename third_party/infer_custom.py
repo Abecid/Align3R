@@ -13,11 +13,11 @@ import torch
 
 from third_party.MoGe.moge.model import MoGeModel
 
-def find_images(directory):
+def find_images(directory, file_end='rgb.jpg'):
     image_paths = []
     for root, dirs, files in os.walk(directory):
         for file in files:
-            if file.lower().endswith(('00032_rgb.jpg')):
+            if file.lower().endswith((file_end)):
             # if file.lower().endswith(('rgb.jpg', 'rgb.png')):
                 image_paths.append(os.path.join(root, file))
     return image_paths
@@ -53,11 +53,16 @@ elif args.dataset_name == "Vkitti":
 elif args.dataset_name == "PointOdyssey":
   dir = f'{args.data_path}/PointOdyssey_proc/'
 
-custom_dir = "scene0014_right"
+custom_dir = "scene0014_right" # Vkitti
+custom_dir = "0047" # Spring
+custom_dir = "westerndesert_Easy_P013_right" # Tartanair
+custom_dir = "Monkaa_proc/treeflight_x2/right" # SceneFlow
+
+file_end = '0500_rgb.jpg'
 
 dir = os.path.join(dir, custom_dir)
 
-image_paths = find_images(dir)
+image_paths = find_images(dir, file_end=file_end)
 
 print(f"Total images: {len(image_paths)}")
 

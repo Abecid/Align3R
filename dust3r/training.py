@@ -123,6 +123,7 @@ def train(args):
     print('Building test dataset {:s}'.format(args.train_dataset))
     data_loader_test = {dataset.split('(')[0]: build_dataset(dataset, args.batch_size, args.num_workers, test=True)
                         for dataset in args.test_dataset.split('+')}
+    data_loader_test = {k: v for k, v in data_loader_test.items() if v is not None}
 
     # model
     print('Loading model: {:s}'.format(args.model))
@@ -273,6 +274,9 @@ def build_dataset(dataset, batch_size, num_workers, test=False):
                              drop_last=not (test))
 
     print(f"{split} dataset length: ", len(loader))
+    if len(loader) == 0:
+        # raise ValueError(f"Dataset {dataset} is empty")
+        return None
     return loader
 
 
