@@ -215,6 +215,7 @@ def train(args):
         if (epoch > 0 and args.eval_freq > 0 and epoch % args.eval_freq == 0):
             test_stats = {}
             for test_name, testset in data_loader_test.items():
+                print(f"Starting testing on {test_name}: {len(testset)} samples")
                 stats = test_one_epoch(model, test_criterion, testset,
                                        device, epoch, log_writer=log_writer, args=args, prefix=test_name)
                 test_stats[test_name] = stats
